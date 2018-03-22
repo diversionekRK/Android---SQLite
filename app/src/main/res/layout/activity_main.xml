@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context="com.example.div.sqlite_test.MainActivity">
+
+    <TextView
+        android:id="@+id/wartosc_etykieta"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Wartość: "
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentTop="true"/>
+
+    <EditText
+        android:id="@+id/wartosc_edycja"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignBaseline="@id/wartosc_etykieta"
+        android:layout_toRightOf="@id/wartosc_etykieta"/>
+
+    <Button
+        android:id="@+id/dodaj_przycisk"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Dodaj"
+        android:layout_below="@+id/wartosc_etykieta"
+        />
+
+    <ListView
+        android:id="@+id/lista_wartosci"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/dodaj_przycisk"
+        ></ListView>
+
+</RelativeLayout>
