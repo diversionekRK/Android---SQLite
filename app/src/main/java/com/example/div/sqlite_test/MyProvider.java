@@ -25,9 +25,9 @@ public class MyProvider extends ContentProvider {
     //stałe pozwalające zidentyfikować rodzaj rozpoznanego URI
     public final static int WHOLE_TABLE = 1;
     public final static int ONE_ROW = 2;
+
     //URiMatcher z pustym korzeniem drzewa URI (NO_MATCH)
     public final static UriMatcher uriMatching = new UriMatcher(UriMatcher.NO_MATCH);
-
     static {
         //dopasowanie rozpoznawanych URI
         uriMatching.addURI(IDENTIFICATOR, MyDBHelper.TABLE_NAME, WHOLE_TABLE);
@@ -62,6 +62,7 @@ public class MyProvider extends ContentProvider {
                 throw new IllegalArgumentException("Nieznane URI: " + uri);
         }
 
+        database.close();
         //powiadomienie o zmianie danych (-> np. odświeżenie listy)
         getContext().getContentResolver().notifyChange(uri, null);
 
@@ -105,6 +106,7 @@ public class MyProvider extends ContentProvider {
                 throw new IllegalArgumentException("Nieznane URI: " + uri);
         }
 
+        database.close();
         //URI może być monitorowane pod kątem zmiany danych – tu jest rejestrowane.
         //obserwator (którego trzeba zarejestrować będzie powiadamiany o zmianie danych)
         cursor.setNotificationUri(getContext().getContentResolver(), uri);
@@ -142,6 +144,8 @@ public class MyProvider extends ContentProvider {
             default:
                     throw new IllegalArgumentException("Nieznane URI: " + uri);
         }
+
+        database.close();
         //powiadomienie o zmianie danych
         getContext().getContentResolver().notifyChange(uri, null);
 
@@ -169,6 +173,8 @@ public class MyProvider extends ContentProvider {
             default:
                 throw new IllegalArgumentException("Nieznane URI: " + uri);
         }
+
+        database.close();
         //powiadomienie o zmianie danych
         getContext().getContentResolver().notifyChange(uri, null);
 

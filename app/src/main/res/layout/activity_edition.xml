@@ -3,97 +3,114 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.div.sqlite_test.EditionActivity"
-    android:stretchColumns="*">
+    android:orientation="vertical"
+    android:stretchColumns="*"
+    tools:context="com.example.div.sqlite_test.EditionActivity">
+
     <TableRow
         android:id="@+id/row1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
+
         <TextView
             android:id="@+id/producerTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Producent"
-            android:layout_marginLeft="10dp"/>
+            android:layout_marginLeft="10dp"
+            android:text="Producent" />
+
         <EditText
             android:id="@+id/producerEditText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_span="2"
-            android:layout_marginRight="10dp"/>
+            android:layout_marginRight="10dp"
+            android:layout_span="2" />
     </TableRow>
+
     <TableRow
         android:id="@+id/row2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
+
         <TextView
             android:id="@+id/modelTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Model"
-            android:layout_marginLeft="10dp"/>
+            android:layout_marginLeft="10dp"
+            android:text="Model" />
+
         <EditText
             android:id="@+id/modelEditText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_span="2"
-            android:layout_marginRight="10dp"/>
+            android:layout_marginRight="10dp"
+            android:layout_span="2" />
     </TableRow>
+
     <TableRow
         android:id="@+id/row3"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
+
         <TextView
             android:id="@+id/versionTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Wersja androida"
-            android:layout_marginLeft="10dp"/>
+            android:layout_marginLeft="10dp"
+            android:text="Wersja androida" />
+
         <EditText
             android:id="@+id/versionEditText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_span="2"
-            android:layout_marginRight="10dp"/>
+            android:layout_marginRight="10dp"
+            android:layout_span="2" />
     </TableRow>
+
     <TableRow
         android:id="@+id/row4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
+
         <TextView
             android:id="@+id/wwwTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="WWW"
-            android:layout_marginLeft="10dp"/>
+            android:layout_marginLeft="10dp"
+            android:text="WWW" />
+
         <EditText
             android:id="@+id/wwwEditText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_span="2"
-            android:layout_marginRight="10dp"/>
+            android:layout_marginRight="10dp"
+            android:layout_span="2" />
     </TableRow>
+
     <TableRow
         android:id="@+id/row5"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content">
+
         <Button
             android:id="@+id/wwwButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="10dp"
-            android:text="WWW"/>
+            android:text="WWW" />
+
         <Button
             android:id="@+id/cancelButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Anuluj"/>
+            android:text="Anuluj" />
+
         <Button
             android:id="@+id/saveButton"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginRight="10dp"
-            android:text="Zapisz"/>
+            android:text="Zapisz" />
     </TableRow>
 
 </TableLayout>
