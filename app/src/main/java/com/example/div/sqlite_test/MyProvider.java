@@ -62,7 +62,7 @@ public class MyProvider extends ContentProvider {
                 throw new IllegalArgumentException("Nieznane URI: " + uri);
         }
 
-        database.close();
+        //database.close();
         //powiadomienie o zmianie danych (-> np. odświeżenie listy)
         getContext().getContentResolver().notifyChange(uri, null);
 
@@ -106,7 +106,7 @@ public class MyProvider extends ContentProvider {
                 throw new IllegalArgumentException("Nieznane URI: " + uri);
         }
 
-        database.close();
+        //database.close();
         //URI może być monitorowane pod kątem zmiany danych – tu jest rejestrowane.
         //obserwator (którego trzeba zarejestrować będzie powiadamiany o zmianie danych)
         cursor.setNotificationUri(getContext().getContentResolver(), uri);
@@ -145,7 +145,7 @@ public class MyProvider extends ContentProvider {
                     throw new IllegalArgumentException("Nieznane URI: " + uri);
         }
 
-        database.close();
+        //database.close();
         //powiadomienie o zmianie danych
         getContext().getContentResolver().notifyChange(uri, null);
 
@@ -174,7 +174,7 @@ public class MyProvider extends ContentProvider {
                 throw new IllegalArgumentException("Nieznane URI: " + uri);
         }
 
-        database.close();
+        //database.close();
         //powiadomienie o zmianie danych
         getContext().getContentResolver().notifyChange(uri, null);
 

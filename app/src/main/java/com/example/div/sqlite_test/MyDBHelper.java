@@ -11,7 +11,7 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class MyDBHelper extends SQLiteOpenHelper {
     private Context context;
 
-    public final static int DB_VERSION = 1;
+    public final static int DB_VERSION = 3;
     public final static String DB_NAME = "baza_testowa";
     public final static String TABLE_NAME = "wartosci";
     public final static String ID_COLUMN = "_id";
@@ -21,17 +21,18 @@ public class MyDBHelper extends SQLiteOpenHelper {
     public final static String VERSION_COLUMN = "version";
     public final static String URL_COLUMN = "url";
     public final static String TAG = "MyDBHelper";
-    public final static String DB_CREATION = "CREATE TABLE " + TABLE_NAME +
+    /*public final static String DB_CREATION = "CREATE TABLE " + TABLE_NAME +
             "(" + ID_COLUMN + " integer primary key autoincrement, " +
             VALUE_COLUMN + " text not null);";
-    /*
+    */
+
     public final static String DB_CREATION = "CREATE TABLE " + TABLE_NAME +
             "(" + ID_COLUMN + " integer primary key autoincrement, " +
-            PRODUCER_COLUMN + " varchar(30) not null), " +
-            MODEL_COLUMN + " varchar(30) not null), " +
-            VERSION_COLUMN + " varchar(10) not null), " +
+            PRODUCER_COLUMN + " varchar(30) not null, " +
+            MODEL_COLUMN + " varchar(30) not null, " +
+            VERSION_COLUMN + " varchar(10) not null, " +
             URL_COLUMN + " varchar(50) not null);";
-     */
+
     public final static String DB_DELETION = "DROP TABLE IF EXISTS " + TABLE_NAME;
 
     public MyDBHelper(Context context) {

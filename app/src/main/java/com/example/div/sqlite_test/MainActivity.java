@@ -18,6 +18,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AbsListView;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ListView;
@@ -29,8 +30,6 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     //adapter łączy kursor z dostawcy i listę
     private SimpleCursorAdapter cursorAdapter;
     private ListView listView;
-    private Button addButton;
-    private EditText valueEditText;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,16 +61,6 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             @Override
             public void onItemCheckedStateChanged(ActionMode actionMode, int i, long l, boolean b) {}
         });
-
-        //obsługa przycisku dodaj
-        addButton = findViewById(R.id.dodaj_przycisk);
-        addButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                addValue();
-            }
-        });
-
     }
 
     private void fillList() {
@@ -80,22 +69,14 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                 (android.app.LoaderManager.LoaderCallbacks<Cursor>)this); //klasa implementująca LoaderCallbacks
 
         //utworzenie mapowania między kolumnami tabeli, a kolumnami wyświetlanej listy
-        String[] mapFrom = new String[] {MyDBHelper.ID_COLUMN, MyDBHelper.VALUE_COLUMN};
+        String[] mapFrom = new String[] {MyDBHelper.ID_COLUMN, MyDBHelper.PRODUCER_COLUMN};
         int[] mapTo = new int[] {R.id.pierwsza, R.id.druga};
 
         //adapter wymaga aby w wyniku zapytania znajdowała się kolumna _id
         cursorAdapter = new SimpleCursorAdapter(this, R.layout.list_row, null, mapFrom, mapTo, 0);
 
+        configureListItemClick();
         listView.setAdapter(cursorAdapter);
-    }
-
-    private void addValue() {
-        ContentValues values = new ContentValues();
-        valueEditText = findViewById(R.id.wartosc_edycja);
-
-        values.put(MyDBHelper.VALUE_COLUMN, valueEditText.getText().toString());
-
-        Uri uriOfNew = getContentResolver().insert(MyProvider.CONTENT_URI, values);
     }
 
     private void deleteValue() {
@@ -104,6 +85,21 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         getContentResolver().delete(ContentUris.withAppendedId(MyProvider.CONTENT_URI, checked[i]),
                 null,
                 null);
+    }
+
+    void configureListItemClick() {
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                //Toast.makeText(MainActivity.this, String.valueOf(i) + " : " + String.valueOf(l), Toast.LENGTH_SHORT).show();
+                //wystartuj z danymi początkowymi
+
+                Intent intent = new Intent(MainActivity.this, EditionActivity.class);
+                intent.putExtra("ROW_ID", (int)l);
+                startActivity(intent);
+
+            }
+        });
     }
 
     @Override
@@ -117,6 +113,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.addButton:
+                //wystartuj czysty
                 Intent intent = new Intent(MainActivity.this, EditionActivity.class);
                 startActivity(intent);
                 return true;
@@ -129,7 +126,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         //adapter wymaga aby w wyniku zapytania znajdowała się kolumna _id
-        String[] projection = {MyDBHelper.ID_COLUMN, MyDBHelper.VALUE_COLUMN};
+        String[] projection = {MyDBHelper.ID_COLUMN, MyDBHelper.PRODUCER_COLUMN};
         CursorLoader cursorLoader = new CursorLoader(this,
                 MyProvider.CONTENT_URI,
                 projection,

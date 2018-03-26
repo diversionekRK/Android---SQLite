@@ -4,7 +4,7 @@
 
     <item
         android:id="@+id/addButton"
-        app:showAsAction="ifRoom"
+        android:checked="false"
         android:title="+"
-        />
+        app:showAsAction="ifRoom" />
 </menu>
