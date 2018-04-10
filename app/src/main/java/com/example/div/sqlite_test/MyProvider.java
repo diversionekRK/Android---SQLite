@@ -6,7 +6,6 @@ import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
-import android.os.CancellationSignal;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
@@ -27,11 +26,12 @@ public class MyProvider extends ContentProvider {
     public final static int ONE_ROW = 2;
 
     //URiMatcher z pustym korzeniem drzewa URI (NO_MATCH)
-    public final static UriMatcher uriMatching = new UriMatcher(UriMatcher.NO_MATCH);
+    public final static UriMatcher uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
+
     static {
         //dopasowanie rozpoznawanych URI
-        uriMatching.addURI(IDENTIFICATOR, MyDBHelper.TABLE_NAME, WHOLE_TABLE);
-        uriMatching.addURI(IDENTIFICATOR, MyDBHelper.TABLE_NAME + "/#", ONE_ROW);
+        uriMatcher.addURI(IDENTIFICATOR, MyDBHelper.TABLE_NAME, WHOLE_TABLE);
+        uriMatcher.addURI(IDENTIFICATOR, MyDBHelper.TABLE_NAME + "/#", ONE_ROW);
     }
 
     @Nullable
@@ -49,11 +49,11 @@ public class MyProvider extends ContentProvider {
     @Nullable
     @Override
     public Uri insert(@NonNull Uri uri, @Nullable ContentValues contentValues) {
-        //czy wiersz, czy cała tabela i otworzenie bazy
-        int uriType = uriMatching.match(uri);
+        int uriType = uriMatcher.match(uri);
         SQLiteDatabase database = myDBHelper.getWritableDatabase();
-
         long addedID = 0;
+
+        //sprawdzenie, czy operacja dotyczy całej tabeli, czy pojedynczego wiersza
         switch (uriType) {
             case WHOLE_TABLE:
                 addedID = database.insert(MyDBHelper.TABLE_NAME, null, contentValues);
@@ -62,7 +62,6 @@ public class MyProvider extends ContentProvider {
                 throw new IllegalArgumentException("Nieznane URI: " + uri);
         }
 
-        //database.close();
         //powiadomienie o zmianie danych (-> np. odświeżenie listy)
         getContext().getContentResolver().notifyChange(uri, null);
 
@@ -72,11 +71,11 @@ public class MyProvider extends ContentProvider {
     @Nullable
     @Override
     public Cursor query(@NonNull Uri uri, @Nullable String[] projection, @Nullable String selection, @Nullable String[] selectionArgs, @Nullable String sortOrder) {
-        int uriType = uriMatching.match(uri);
+        int uriType = uriMatcher.match(uri);
         SQLiteDatabase database = myDBHelper.getReadableDatabase();
-
         Cursor cursor = null;
 
+        //sprawdzenie, czy operacja dotyczy całej tabeli, czy pojedynczego wiersza
         switch (uriType) {
             case WHOLE_TABLE:
                 cursor = database.query(false,
@@ -90,6 +89,7 @@ public class MyProvider extends ContentProvider {
                         null,
                         null);
                 break;
+
             case ONE_ROW:
                 cursor = database.query(false,
                         MyDBHelper.TABLE_NAME,
@@ -106,7 +106,6 @@ public class MyProvider extends ContentProvider {
                 throw new IllegalArgumentException("Nieznane URI: " + uri);
         }
 
-        //database.close();
         //URI może być monitorowane pod kątem zmiany danych – tu jest rejestrowane.
         //obserwator (którego trzeba zarejestrować będzie powiadamiany o zmianie danych)
         cursor.setNotificationUri(getContext().getContentResolver(), uri);
@@ -119,7 +118,7 @@ public class MyProvider extends ContentProvider {
         if (selection != null && !selection.equals(""))
             selection = selection + " and " + MyDBHelper.ID_COLUMN + "=" + uri.getLastPathSegment();
 
-            //jeżeli nie ma WHERE tworzymy je od początku
+        //jeżeli nie ma WHERE tworzymy je od początku
         else
             selection = MyDBHelper.ID_COLUMN + "=" + uri.getLastPathSegment();
         return selection;
@@ -127,9 +126,11 @@ public class MyProvider extends ContentProvider {
 
     @Override
     public int delete(@NonNull Uri uri, @Nullable String selection, @Nullable String[] selectionArgs) {
-        int uriType = uriMatching.match(uri);
+        int uriType = uriMatcher.match(uri);
         SQLiteDatabase database = myDBHelper.getWritableDatabase();
         int deletedNumber = 0;
+
+        //sprawdzenie, czy operacja dotyczy całej tabeli, czy pojedynczego wiersza
         switch (uriType) {
             case WHOLE_TABLE:
                 deletedNumber = database.delete(MyDBHelper.TABLE_NAME,
@@ -142,10 +143,9 @@ public class MyProvider extends ContentProvider {
                         selectionArgs);
                 break;
             default:
-                    throw new IllegalArgumentException("Nieznane URI: " + uri);
+                throw new IllegalArgumentException("Nieznane URI: " + uri);
         }
 
-        //database.close();
         //powiadomienie o zmianie danych
         getContext().getContentResolver().notifyChange(uri, null);
 
@@ -154,9 +154,11 @@ public class MyProvider extends ContentProvider {
 
     @Override
     public int update(@NonNull Uri uri, @Nullable ContentValues contentValues, @Nullable String selection, @Nullable String[] selectionArgs) {
-        int uriType = uriMatching.match(uri);
+        int uriType = uriMatcher.match(uri);
         SQLiteDatabase database = myDBHelper.getWritableDatabase();
         int updatedNumber = 0;
+
+        //sprawdzenie, czy operacja dotyczy całej tabeli, czy pojedynczego wiersza
         switch (uriType) {
             case WHOLE_TABLE:
                 updatedNumber = database.update(MyDBHelper.TABLE_NAME,
@@ -174,7 +176,6 @@ public class MyProvider extends ContentProvider {
                 throw new IllegalArgumentException("Nieznane URI: " + uri);
         }
 
-        //database.close();
         //powiadomienie o zmianie danych
         getContext().getContentResolver().notifyChange(uri, null);
 

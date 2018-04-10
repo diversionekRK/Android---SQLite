@@ -15,17 +15,13 @@ public class MyDBHelper extends SQLiteOpenHelper {
     public final static String DB_NAME = "baza_testowa";
     public final static String TABLE_NAME = "wartosci";
     public final static String ID_COLUMN = "_id";
-    public final static String VALUE_COLUMN = "wartosc";
     public final static String PRODUCER_COLUMN = "producer";
     public final static String MODEL_COLUMN = "model";
     public final static String VERSION_COLUMN = "version";
     public final static String URL_COLUMN = "url";
     public final static String TAG = "MyDBHelper";
-    /*public final static String DB_CREATION = "CREATE TABLE " + TABLE_NAME +
-            "(" + ID_COLUMN + " integer primary key autoincrement, " +
-            VALUE_COLUMN + " text not null);";
-    */
 
+    //kod generujący bazę
     public final static String DB_CREATION = "CREATE TABLE " + TABLE_NAME +
             "(" + ID_COLUMN + " integer primary key autoincrement, " +
             PRODUCER_COLUMN + " varchar(30) not null, " +
@@ -33,6 +29,7 @@ public class MyDBHelper extends SQLiteOpenHelper {
             VERSION_COLUMN + " varchar(10) not null, " +
             URL_COLUMN + " varchar(50) not null);";
 
+    //kod usuwający bazę
     public final static String DB_DELETION = "DROP TABLE IF EXISTS " + TABLE_NAME;
 
     public MyDBHelper(Context context) {

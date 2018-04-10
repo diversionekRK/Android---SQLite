@@ -12,9 +12,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import static android.support.v4.util.PatternsCompat.WEB_URL;
-
-
 public class EditionActivity extends AppCompatActivity {
     private EditText producerEditText;
     private EditText modelEditText;
@@ -35,6 +32,7 @@ public class EditionActivity extends AppCompatActivity {
         initFields();
 
 
+        //sprawdzenie, czy aktywność uruchomiona w celu dodania, czy modyfikacji istniejącego elementu
         try {
             rowId = getIntent().getExtras().getInt("ROW_ID");
             fillEditsFromDatabase(rowId);
@@ -64,14 +62,18 @@ public class EditionActivity extends AppCompatActivity {
                 MyDBHelper.VERSION_COLUMN,
                 MyDBHelper.URL_COLUMN
         };
+
         Cursor cursor = getContentResolver().query(
                 ContentUris.withAppendedId(MyProvider.CONTENT_URI, rowId),
                 projection,
-                "_id=" + rowId,
+                null,
                 null,
                 null
         );
+
         cursor.moveToFirst();
+
+        //ustawienie zawartości pól na podstawie danych z bazy
         producerEditText.setText(cursor.getString(cursor.getColumnIndex(MyDBHelper.PRODUCER_COLUMN)));
         modelEditText.setText(cursor.getString(cursor.getColumnIndex(MyDBHelper.MODEL_COLUMN)));
         versionEditText.setText(cursor.getString(cursor.getColumnIndex(MyDBHelper.VERSION_COLUMN)));
@@ -88,18 +90,30 @@ public class EditionActivity extends AppCompatActivity {
         wwwButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                String[] projection = {MyDBHelper.URL_COLUMN};
+                Intent wwwIntent;
+
+                if(action == ACTION_ADD) {
+                    Toast.makeText(EditionActivity.this, "Najpierw dodaj adres WWW do bazy", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+
+                //odczyt adresu URL powiązanego z elementem z bazy
                 Cursor cursor = getContentResolver().query(
                         ContentUris.withAppendedId(MyProvider.CONTENT_URI, rowId),
-                        projection,
+                        new String[]{MyDBHelper.URL_COLUMN},
                         null,
                         null,
                         null
                 );
+
                 cursor.moveToFirst();
                 String url = cursor.getString(cursor.getColumnIndex(MyDBHelper.URL_COLUMN));
-                //Toast.makeText(EditionActivity.this, url, Toast.LENGTH_SHORT).show();
-                Intent wwwIntent = new Intent("android.intent.action.VIEW", Uri.parse("https://" + url));
+
+                //uruchomienie przeglądarki
+                if(url.startsWith("http://") || url.startsWith("https://"))
+                    wwwIntent = new Intent("android.intent.action.VIEW", Uri.parse(url));
+                else
+                    wwwIntent = new Intent("android.intent.action.VIEW", Uri.parse("http://" + url));
                 startActivity(wwwIntent);
             }
         });
@@ -120,8 +134,11 @@ public class EditionActivity extends AppCompatActivity {
             public void onClick(View view) {
                 boolean fieldsOk = validateFields();
 
+                //jeśli pola wypełniono poprawnie
                 if (fieldsOk) {
+                    //modyfikacja bazy
                     modifyDatabase();
+                    //powrót do głównej aktywności
                     finish();
                 }
             }
@@ -135,19 +152,23 @@ public class EditionActivity extends AppCompatActivity {
         String wwwText = getStringFromEdit(wwwEditText);
         boolean resultOfValidation = true;
 
+        //sprawdzenie pola "Producent"
         if (!producerText.matches("[A-Z][a-z]{0,15}")) {
             producerEditText.setError("Wypełnij to pole (zacznij z dużej litery)");
             resultOfValidation = false;
         }
+        //sprawdzenie pola "Model"
         if (!modelText.matches("[A-Z][A-Za-z0-9]{0,15}")) {
             modelEditText.setError("Wypełnij to pole (zacznij z dużej litery)");
             resultOfValidation = false;
         }
+        //sprawdzenie pola "Wersja androida"
         if (!versionText.matches("[0-9]{1,3}([.][0-9]{1,3}){0,2}")) {
             versionEditText.setError("Wypełnij to pole (np. 6.0.3)");
             resultOfValidation = false;
         }
-        if(!wwwText.matches("^(http:\\/\\/|https:\\/\\/)?(www.)?([a-zA-Z0-9]+).[a-zA-Z0-9]*.[a-z]{3}.?([a-z]+)?$")) {
+        //sprawdzenie pola "WWW"
+        if(!wwwText.matches("^(http:\\/\\/|https:\\/\\/)?(www.)?([a-zA-Z0-9]+)[.].+$")) {
             wwwEditText.setError("Podaj poprawny adres WWW");
             resultOfValidation = false;
         }
@@ -156,15 +177,19 @@ public class EditionActivity extends AppCompatActivity {
     }
 
     private void modifyDatabase() {
+        //przygotowanie danych do wstawienia
         ContentValues values = new ContentValues();
         values.put(MyDBHelper.PRODUCER_COLUMN, getStringFromEdit(producerEditText));
         values.put(MyDBHelper.MODEL_COLUMN, getStringFromEdit(modelEditText));
         values.put(MyDBHelper.VERSION_COLUMN, getStringFromEdit(versionEditText));
         values.put(MyDBHelper.URL_COLUMN, getStringFromEdit(wwwEditText));
 
+        //w przypadku dodawania nowego elementu - insert
         if (action == ACTION_ADD) {
             getContentResolver().insert(MyProvider.CONTENT_URI, values);
-        } else if (action == ACTION_UPDATE) {
+        }
+        //w przypadku modyfikacji - update istniejącego
+        else if (action == ACTION_UPDATE) {
             getContentResolver().update(
                     ContentUris.withAppendedId(MyProvider.CONTENT_URI, rowId),
                     values,
