@@ -11,9 +11,9 @@ import android.database.sqlite.SQLiteOpenHelper;
 public class MyDBHelper extends SQLiteOpenHelper {
     private Context context;
 
-    public final static int DB_VERSION = 3;
-    public final static String DB_NAME = "baza_testowa";
-    public final static String TABLE_NAME = "wartosci";
+    public final static int DB_VERSION = 1;
+    public final static String DB_NAME = "app2DB";
+    public final static String TABLE_NAME = "smartphones";
     public final static String ID_COLUMN = "_id";
     public final static String PRODUCER_COLUMN = "producer";
     public final static String MODEL_COLUMN = "model";

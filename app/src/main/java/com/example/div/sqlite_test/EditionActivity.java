@@ -35,10 +35,11 @@ public class EditionActivity extends AppCompatActivity {
         //sprawdzenie, czy aktywność uruchomiona w celu dodania, czy modyfikacji istniejącego elementu
         try {
             rowId = getIntent().getExtras().getInt("ROW_ID");
+            //uzupełnienie pól danymi powiązanymi z daną pozycją
             fillEditsFromDatabase(rowId);
+
             action = ACTION_UPDATE;
         } catch (NullPointerException e) {
-            Toast.makeText(this, "Error", Toast.LENGTH_SHORT).show();
             action = ACTION_ADD;
         }
 
@@ -153,18 +154,18 @@ public class EditionActivity extends AppCompatActivity {
         boolean resultOfValidation = true;
 
         //sprawdzenie pola "Producent"
-        if (!producerText.matches("[A-Z][a-z]{0,15}")) {
-            producerEditText.setError("Wypełnij to pole (zacznij z dużej litery)");
+        if (!producerText.matches("[A-Z][A-Za-z0-9]{0,15}")) {
+            producerEditText.setError("Wypełnij poprawnie (zacznij z dużej litery)");
             resultOfValidation = false;
         }
         //sprawdzenie pola "Model"
-        if (!modelText.matches("[A-Z][A-Za-z0-9]{0,15}")) {
-            modelEditText.setError("Wypełnij to pole (zacznij z dużej litery)");
+        if (!modelText.matches("[A-Z][A-Za-z0-9]{0,15}( [A-Za-z0-9]{0,15}){0,2}")) {
+            modelEditText.setError("Wypełnij poprawnie (zacznij z dużej litery)");
             resultOfValidation = false;
         }
         //sprawdzenie pola "Wersja androida"
         if (!versionText.matches("[0-9]{1,3}([.][0-9]{1,3}){0,2}")) {
-            versionEditText.setError("Wypełnij to pole (np. 6.0.3)");
+            versionEditText.setError("Wypełnij poprawnie (np. 6.0.3)");
             resultOfValidation = false;
         }
         //sprawdzenie pola "WWW"

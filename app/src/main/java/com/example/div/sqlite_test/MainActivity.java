@@ -30,7 +30,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
         setContentView(R.layout.activity_main);
 
         //ustawienie adaptera i wyświetlenie zawartości
-        listView = findViewById(R.id.lista_wartosci);
+        listView = findViewById(R.id.telephonesListView);
         fillList();
 
         //zaznaczanie wielu elementów jednocześnie
@@ -42,7 +42,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             public boolean onCreateActionMode(ActionMode actionMode, Menu menu) {
                 //generowanie menu na podstawie XML
                 MenuInflater inflater = actionMode.getMenuInflater();
-                inflater.inflate(R.menu.pasek_akcji, menu);
+                inflater.inflate(R.menu.action_bar, menu);
                 return true;
             }
 
@@ -55,7 +55,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
             public boolean onActionItemClicked(ActionMode actionMode, MenuItem menuItem) {
                 switch (menuItem.getItemId()) {
                     //obsługa przycisku potwierdzającego usunięcie zaznaczonych elementów
-                    case R.id.akcja_druga:
+                    case R.id.actionDeleteMarked:
                         deleteValues();
                         return true;
                 }
@@ -78,8 +78,8 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
                 (android.app.LoaderManager.LoaderCallbacks<Cursor>) this); //klasa implementująca LoaderCallbacks
 
         //utworzenie mapowania między kolumnami tabeli, a kolumnami wyświetlanej listy
-        String[] mapFrom = new String[]{MyDBHelper.ID_COLUMN, MyDBHelper.PRODUCER_COLUMN};
-        int[] mapTo = new int[]{R.id.pierwsza, R.id.druga};
+        String[] mapFrom = new String[]{MyDBHelper.PRODUCER_COLUMN, MyDBHelper.MODEL_COLUMN};
+        int[] mapTo = new int[]{R.id.showProducerTextView, R.id.showModelTextView};
 
         //adapter wymaga aby w wyniku zapytania znajdowała się kolumna _id
         cursorAdapter = new SimpleCursorAdapter(this, R.layout.list_row, null, mapFrom, mapTo, 0);
@@ -119,7 +119,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     public boolean onCreateOptionsMenu(Menu menu) {
         //tworzenie paska MENU
         MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.pasek_menu, menu);
+        inflater.inflate(R.menu.menu_bar, menu);
         return true;
     }
 
@@ -140,7 +140,7 @@ public class MainActivity extends AppCompatActivity implements LoaderManager.Loa
     @Override
     public Loader<Cursor> onCreateLoader(int id, Bundle args) {
         //adapter wymaga aby w wyniku zapytania znajdowała się kolumna _id
-        String[] projection = {MyDBHelper.ID_COLUMN, MyDBHelper.PRODUCER_COLUMN};
+        String[] projection = {MyDBHelper.ID_COLUMN, MyDBHelper.PRODUCER_COLUMN, MyDBHelper.MODEL_COLUMN};
         return new CursorLoader(this,
                 MyProvider.CONTENT_URI,
                 projection,

@@ -18,9 +18,11 @@ public class MyProvider extends ContentProvider {
 
     //identyfikator (authority) dostawcy
     public final static String IDENTIFICATOR = "com.example.div.sqlite_test.MyProvider";
+
     //stała - aby nie trzeba było wpisywać tekstu samodzielnie
     public final static Uri CONTENT_URI = Uri.parse("content://" + IDENTIFICATOR +
             "/" + MyDBHelper.TABLE_NAME);
+
     //stałe pozwalające zidentyfikować rodzaj rozpoznanego URI
     public final static int WHOLE_TABLE = 1;
     public final static int ONE_ROW = 2;
@@ -89,7 +91,6 @@ public class MyProvider extends ContentProvider {
                         null,
                         null);
                 break;
-
             case ONE_ROW:
                 cursor = database.query(false,
                         MyDBHelper.TABLE_NAME,
