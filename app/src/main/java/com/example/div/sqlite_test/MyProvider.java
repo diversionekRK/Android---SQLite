@@ -17,10 +17,10 @@ public class MyProvider extends ContentProvider {
     private MyDBHelper myDBHelper;
 
     //identyfikator (authority) dostawcy
-    public final static String IDENTIFICATOR = "com.example.div.sqlite_test.MyProvider";
+    public final static String AUTHORITY = "com.example.div.sqlite_test.MyProvider";
 
     //stała - aby nie trzeba było wpisywać tekstu samodzielnie
-    public final static Uri CONTENT_URI = Uri.parse("content://" + IDENTIFICATOR +
+    public final static Uri CONTENT_URI = Uri.parse("content://" + AUTHORITY +
             "/" + MyDBHelper.TABLE_NAME);
 
     //stałe pozwalające zidentyfikować rodzaj rozpoznanego URI
@@ -32,8 +32,8 @@ public class MyProvider extends ContentProvider {
 
     static {
         //dopasowanie rozpoznawanych URI
-        uriMatcher.addURI(IDENTIFICATOR, MyDBHelper.TABLE_NAME, WHOLE_TABLE);
-        uriMatcher.addURI(IDENTIFICATOR, MyDBHelper.TABLE_NAME + "/#", ONE_ROW);
+        uriMatcher.addURI(AUTHORITY, MyDBHelper.TABLE_NAME, WHOLE_TABLE);
+        uriMatcher.addURI(AUTHORITY, MyDBHelper.TABLE_NAME + "/#", ONE_ROW);
     }
 
     @Nullable

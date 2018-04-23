@@ -6,5 +6,7 @@
         android:id="@+id/addButton"
         android:checked="false"
         android:title="+"
-        app:showAsAction="ifRoom" />
+        app:showAsAction="ifRoom"
+        android:icon="@drawable/ic_add_phone"
+        />
 </menu>
